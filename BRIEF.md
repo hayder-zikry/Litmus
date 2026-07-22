@@ -187,10 +187,10 @@ Four independent tracks. File ownership is listed so we don't collide on the rep
 
 | Track | Owner |
 |---|---|
-| A — Orchestration & API | |
-| B — Verification | |
-| C — Provenance | |
-| D — Frontend | |
+| A — Orchestration & API | Muhammad |
+| B — Verification | Hayder |
+| C — Provenance | Kz |
+| D — Frontend | TBA |
 
 If we are short of people, B absorbs A. **Cut C last** — provenance is the most memorable thing in
 the demo and nothing else we have is visual in the same way.
