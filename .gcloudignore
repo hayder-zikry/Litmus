@@ -1,0 +1,16 @@
+# Keep the deploy upload small: only ship what the app needs to run.
+.git/
+.gitignore
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.example
+
+# Frontend / extension are deployed separately, not part of the backend container
+extension/
+web/node_modules/
+web/dist/
+
+# Docs aren't needed to run the server
+*.md

@@ -24,8 +24,10 @@ def make_job_id() -> str:
     return "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
 
 
-@app.get("/healthz")
-def healthz():
+@app.get("/health")
+def health():
+    # Note: /healthz is intercepted by Google's front-end infrastructure and never
+    # reaches the app, so we serve the health check at /health instead.
     return {"ok": True}
 
 @app.post("/analyze")
