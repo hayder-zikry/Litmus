@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Litmus",
+  "version": "0.1",
+  "description": "Fact-checks the YouTube Short you're watching, on the page, automatically.",
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content.js"],
+      "css": ["panel.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+/* The Litmus panel, drawn on top of the YouTube page in the top-right corner. */
+#litmus-panel {
+  position: fixed;
+  top: 72px;
+  right: 16px;
+  width: 300px;
+  z-index: 99999;
+  background: #ffffff;
+  color: #0f0f0f;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+  padding: 14px 16px;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.litmus-head {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin-bottom: 8px;
+}
+
+.litmus-loading {
+  color: #606060;
+}
+
+.litmus-score {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.litmus-breakdown {
+  color: #606060;
+  margin-bottom: 10px;
+}
+
+.litmus-claims {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.litmus-claims li {
+  padding: 6px 0;
+  border-top: 1px solid #eee;
+}
+
+.litmus-verdict {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 6px;
+  margin-right: 6px;
+  color: #fff;
+}
+
+.litmus-refuted { background: #c0392b; }
+.litmus-disputed { background: #e67e22; }
+.litmus-supported { background: #27ae60; }
+.litmus-unverified { background: #7f8c8d; }
