@@ -200,7 +200,7 @@ the demo and nothing else we have is visual in the same way.
 
 - `POST /analyze` — accepts `{url, start_s?, end_s?}`, returns a job id immediately (HTTP 202)
 - `GET /jobs/{id}` — returns the current `AnalysisResult`, partially filled while running
-- `GET /healthz` — returns 200. Cloud Run needs it and you need it on day one.
+- `GET /health` — returns 200. Cloud Run needs it and you need it on day one.
 - Runs the pipeline in `BackgroundTasks`, updating `status` as it moves through stages
 
 **Cache — on disk, not in memory.** Key on `(video_id, start_s, end_s)`, hashed to a filename:
@@ -390,7 +390,7 @@ Why each flag matters:
 | `--timeout 300` | Jobs take 20–40s; polling requests are short. 300s is headroom. |
 | `--source .` | Builds the container from `requirements.txt`. No Dockerfile needed. |
 
-Hit `/healthz` on the deployed URL. **Do not build anything else until that returns 200.**
+Hit `/health` on the deployed URL. **Do not build anything else until that returns 200.**
 
 `--set-env-vars` puts keys in your shell history. Acceptable for a hackathon; use Secret Manager
 with `--set-secrets` if you have a spare twenty minutes.
@@ -431,7 +431,7 @@ minutes ago.
 - Have 3–4 videos chosen and rehearsed. **At least one must have recycled footage** — the
   provenance result is the most memorable thing we have. At least one should end mostly
   `unverified`, so you can show the honest-when-weak panel deliberately rather than by accident.
-- Redeploy and hit `/healthz` the morning of. Then leave it alone.
+- Redeploy and hit `/health` the morning of. Then leave it alone.
 
 ### The extension button — 30 lines, do it if you have an hour
 

@@ -128,7 +128,7 @@ python -c "import json, models; models.AnalysisResult(**json.load(open('example_
 ### 1.4 Stub API
 
 > Create `main.py` — a FastAPI app with:
-> - `GET /healthz` returning `{"ok": true}`
+> - `GET /health` returning `{"ok": true}`
 > - `POST /analyze` accepting `{url, start_s?, end_s?}`, returning HTTP 202 with a random job id
 > - `GET /jobs/{id}` returning the contents of example_response.json for now
 > - CORSMiddleware with `allow_origins=["*"]`, all methods, all headers
@@ -141,7 +141,7 @@ without it. This is the single most common integration bug in this shape of proj
 Test locally:
 ```bash
 uvicorn main:app --reload
-curl localhost:8000/healthz
+curl localhost:8000/health
 ```
 
 ### 1.5 Deploy — ⚠️ do not skip this
@@ -159,7 +159,7 @@ gcloud run deploy litmus-api --source . \
 First deploy takes 3–5 minutes. Then:
 
 ```bash
-curl https://litmus-api-xxxxx.a.run.app/healthz
+curl https://litmus-api-xxxxx.a.run.app/health
 ```
 
 **If that doesn't return 200, stop and fix it now.** Deployment failing at hour 40 with a finished
@@ -385,7 +385,7 @@ extension icon on a real YouTube page.
 **Freeze code with three hours left.** Bug fixes only. Spend the time rehearsing out loud,
 standing up, five times. Everyone learns the explanation in §11.
 
-**Morning of:** redeploy, `curl /healthz`, load the frontend on your phone, then don't touch it.
+**Morning of:** redeploy, `curl /health`, load the frontend on your phone, then don't touch it.
 
 ---
 
@@ -441,7 +441,7 @@ Five moments where you stop and check rather than push forward.
 
 | Gate | Must be true | If it isn't |
 |---|---|---|
-| End of Phase 1 | `/healthz` returns 200 from the Cloud Run URL | Nobody starts a track. Fix deployment. |
+| End of Phase 1 | `/health` returns 200 from the Cloud Run URL | Nobody starts a track. Fix deployment. |
 | Spike A | Real claims come back from a real Short | Whole team stops. This is the project. |
 | Spike B | You know whether grounding metadata or the schema fallback is your real path | Track B is guessing |
 | End of Track B3 | A nonsense claim returns `unverified` | You have a wrapper, not a verification system |
