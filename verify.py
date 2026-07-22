@@ -106,20 +106,17 @@ _SYSTEM = (
     "verdict must be exactly one of: supported, disputed, refuted, unverified."
 )
 
-_client = None
-
-
 def _get_client():
-    """Create the Vertex client on first use so importing this module needs no creds."""
-    global _client
-    if _client is None:
-        from google import genai
-        _client = genai.Client(
-            vertexai=True,
-            project=os.environ["GOOGLE_CLOUD_PROJECT"],
-            location=os.environ["GOOGLE_CLOUD_LOCATION"],
-        )
-    return _client
+    """A fresh Vertex client per call -- NOT cached/shared. The genai SDK's client isn't safe to
+    reuse across concurrent threads (asyncio.to_thread): one call finishing can tear down shared
+    internals and break others still in flight ("client has been closed"). Creating one is cheap;
+    it doesn't hit the network until the first real request."""
+    from google import genai
+    return genai.Client(
+        vertexai=True,
+        project=os.environ["GOOGLE_CLOUD_PROJECT"],
+        location=os.environ["GOOGLE_CLOUD_LOCATION"],
+    )
 
 
 def grounding_lookup(claim_text: str, claim_id: str) -> models.ClaimVerdict:
@@ -128,7 +125,9 @@ def grounding_lookup(claim_text: str, claim_id: str) -> models.ClaimVerdict:
     (brief non-negotiable #2), never left to the model's judgment."""
     from google.genai import types
 
-    resp = _get_client().models.generate_content(
+    # Held in a local so it can't be garbage-collected mid-request (see extract.py for why).
+    client = _get_client()
+    resp = client.models.generate_content(
         model=os.environ["GEMINI_MODEL"],
         contents=f"Verify this claim: {claim_text}",
         config=types.GenerateContentConfig(

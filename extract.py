@@ -120,22 +120,20 @@ _PROMPT = (
     "Report what the video CLAIMS only -- never whether it is true."
 )
 
-_client = None
-
-
 def _get_client():
-    """Create the Vertex client on first use so importing this module needs no creds."""
-    global _client
-    if _client is None:
-        from dotenv import load_dotenv
-        from google import genai
-        load_dotenv()
-        _client = genai.Client(
-            vertexai=True,
-            project=os.environ["GOOGLE_CLOUD_PROJECT"],
-            location=os.environ["GOOGLE_CLOUD_LOCATION"],
-        )
-    return _client
+    """A fresh Vertex client per call -- NOT cached/shared. The genai SDK's client isn't safe to
+    reuse across concurrent threads: multiple jobs could extract concurrently on Cloud Run, and
+    reuse can cause "client has been closed" errors when one call finishes and tears down shared
+    internals mid-flight for another. Creating one is cheap; it doesn't hit the network until the
+    first real request."""
+    from dotenv import load_dotenv
+    from google import genai
+    load_dotenv()
+    return genai.Client(
+        vertexai=True,
+        project=os.environ["GOOGLE_CLOUD_PROJECT"],
+        location=os.environ["GOOGLE_CLOUD_LOCATION"],
+    )
 
 
 def extract(url: str, start_s: float | None = None, end_s: float | None = None) -> models.Extraction:
@@ -160,7 +158,11 @@ def extract(url: str, start_s: float | None = None, end_s: float | None = None) 
         video_metadata=video_metadata,
     )
 
-    resp = _get_client().models.generate_content(
+    # Held in a local so it can't be garbage-collected mid-request: the SDK's client closes its
+    # own HTTP connection in __del__, and a temporary with no other reference can be collected
+    # while a slow call (like video processing) is still retrying, closing the connection under it.
+    client = _get_client()
+    resp = client.models.generate_content(
         model=os.environ["GEMINI_MODEL"],
         contents=types.Content(role="user", parts=[video_part, types.Part(text=_PROMPT)]),
         config=types.GenerateContentConfig(

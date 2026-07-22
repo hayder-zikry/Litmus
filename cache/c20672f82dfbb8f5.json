@@ -1,0 +1,435 @@
+{
+  "job_id": "4oe0qj7r",
+  "status": "done",
+  "video_id": "klhX42PAzsk",
+  "video_url": "https://www.youtube.com/watch?v=klhX42PAzsk",
+  "start_s": null,
+  "end_s": null,
+  "extraction": {
+    "language": "eng",
+    "summary": "The video lists countries consuming the highest and lowest amounts of various fruits globally.",
+    "segments": [
+      {
+        "start_s": 0.0,
+        "end_s": 2.8,
+        "speech": "The country that eats the most strawberries in the world is the United States.",
+        "on_screen_text": "THAT STRAWBERRIES UNITED STATES 8 hours"
+      },
+      {
+        "start_s": 2.8,
+        "end_s": 6.5,
+        "speech": "The country that eats the least strawberries in the world is Afghanistan.",
+        "on_screen_text": "THE LEAST WORLD AFGHANISTAN"
+      },
+      {
+        "start_s": 6.5,
+        "end_s": 9.3,
+        "speech": "The country that eats the most apples in the world is China.",
+        "on_screen_text": "THAT IN CHINA"
+      },
+      {
+        "start_s": 9.3,
+        "end_s": 11.8,
+        "speech": "The country that eats the least apples in the world is Somalia.",
+        "on_screen_text": "EATS"
+      },
+      {
+        "start_s": 11.8,
+        "end_s": 14.7,
+        "speech": "The country that eats the most oranges in the world is Spain.",
+        "on_screen_text": "THE WORLD"
+      },
+      {
+        "start_s": 14.7,
+        "end_s": 18.0,
+        "speech": "The country that eats the least oranges in the world is Mongolia.",
+        "on_screen_text": "THE LEAST WORLD"
+      },
+      {
+        "start_s": 18.0,
+        "end_s": 20.8,
+        "speech": "The country that eats the most mangoes in the world is India.",
+        "on_screen_text": "THE MOST WORLD"
+      },
+      {
+        "start_s": 20.8,
+        "end_s": 23.8,
+        "speech": "The country that eats the least mangoes in the world is Norway.",
+        "on_screen_text": "COUNTRY MANGOES NORWAY"
+      },
+      {
+        "start_s": 23.8,
+        "end_s": 26.6,
+        "speech": "The country that eats the most avocados in the world is Mexico.",
+        "on_screen_text": "THAT AVOCADOS MEXICO"
+      },
+      {
+        "start_s": 26.6,
+        "end_s": 29.8,
+        "speech": "The country that eats the least avocados in the world is Iceland.",
+        "on_screen_text": "COUNTRY AVOCADOS IS"
+      }
+    ],
+    "claims": [
+      {
+        "id": "c1",
+        "text": "The United States is the country that eats the most strawberries in the world.",
+        "verbatim": "The country that eats the most strawberries in the world is the United States.",
+        "start_s": 0.0,
+        "end_s": 2.8,
+        "claim_type": "statistic",
+        "checkable": true,
+        "entities": [
+          "United States",
+          "strawberries"
+        ]
+      },
+      {
+        "id": "c2",
+        "text": "Afghanistan is the country that eats the least strawberries in the world.",
+        "verbatim": "The country that eats the least strawberries in the world is Afghanistan.",
+        "start_s": 2.8,
+        "end_s": 6.5,
+        "claim_type": "statistic",
+        "checkable": true,
+        "entities": [
+          "Afghanistan",
+          "strawberries"
+        ]
+      },
+      {
+        "id": "c3",
+        "text": "China is the country that eats the most apples in the world.",
+        "verbatim": "The country that eats the most apples in the world is China.",
+        "start_s": 6.5,
+        "end_s": 9.3,
+        "claim_type": "statistic",
+        "checkable": true,
+        "entities": [
+          "China",
+          "apples"
+        ]
+      },
+      {
+        "id": "c4",
+        "text": "Somalia is the country that eats the least apples in the world.",
+        "verbatim": "The country that eats the least apples in the world is Somalia.",
+        "start_s": 9.3,
+        "end_s": 11.8,
+        "claim_type": "statistic",
+        "checkable": true,
+        "entities": [
+          "Somalia",
+          "apples"
+        ]
+      },
+      {
+        "id": "c5",
+        "text": "Spain is the country that eats the most oranges in the world.",
+        "verbatim": "The country that eats the most oranges in the world is Spain.",
+        "start_s": 11.8,
+        "end_s": 14.7,
+        "claim_type": "statistic",
+        "checkable": true,
+        "entities": [
+          "Spain",
+          "oranges"
+        ]
+      },
+      {
+        "id": "c6",
+        "text": "Mongolia is the country that eats the least oranges in the world.",
+        "verbatim": "The country that eats the least oranges in the world is Mongolia.",
+        "start_s": 14.7,
+        "end_s": 18.0,
+        "claim_type": "statistic",
+        "checkable": true,
+        "entities": [
+          "Mongolia",
+          "oranges"
+        ]
+      },
+      {
+        "id": "c7",
+        "text": "India is the country that eats the most mangoes in the world.",
+        "verbatim": "The country that eats the most mangoes in the world is India.",
+        "start_s": 18.0,
+        "end_s": 20.8,
+        "claim_type": "statistic",
+        "checkable": true,
+        "entities": [
+          "India",
+          "mangoes"
+        ]
+      },
+      {
+        "id": "c8",
+        "text": "Norway is the country that eats the least mangoes in the world.",
+        "verbatim": "The country that eats the least mangoes in the world is Norway.",
+        "start_s": 20.8,
+        "end_s": 23.8,
+        "claim_type": "statistic",
+        "checkable": true,
+        "entities": [
+          "Norway",
+          "mangoes"
+        ]
+      },
+      {
+        "id": "c9",
+        "text": "Mexico is the country that eats the most avocados in the world.",
+        "verbatim": "The country that eats the most avocados in the world is Mexico.",
+        "start_s": 23.8,
+        "end_s": 26.6,
+        "claim_type": "statistic",
+        "checkable": true,
+        "entities": [
+          "Mexico",
+          "avocados"
+        ]
+      },
+      {
+        "id": "c10",
+        "text": "Iceland is the country that eats the least avocados in the world.",
+        "verbatim": "The country that eats the least avocados in the world is Iceland.",
+        "start_s": 26.6,
+        "end_s": 29.8,
+        "claim_type": "statistic",
+        "checkable": true,
+        "entities": [
+          "Iceland",
+          "avocados"
+        ]
+      }
+    ],
+    "context_mismatch": null,
+    "manipulation_signals": [
+      "rapid_edits",
+      "text_overlays",
+      "stock_footage_compilation"
+    ],
+    "injection_attempt": false
+  },
+  "verdicts": [
+    {
+      "claim_id": "c1",
+      "verdict": "refuted",
+      "confidence": 0.95,
+      "reasoning": "China is the country that consumes the most strawberries globally in total volume, producing and consuming over 3.4 to 4.2 million metric tons of strawberries annually—more than three times the consumption volume of the United States. In terms of per-capita strawberry consumption, Turkey ranks highest worldwide.",
+      "evidence": [
+        {
+          "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHTui1PoPhRdnkVYvtVLS4wY9xcnVthvvk1zbHTMTTLLinZsxmBIGddQHAhTGA971cBvbPyoH994A8G7c7MDmrnky1QI88q2ohvD5uFRdeNK_dAAik-1nfaijTnCj_D56oV6KunEQvuE5eHgmUsNEJgRYPWclyiMeoywb-kAfzE-5PhAY1kd74rZSRKugsE",
+          "title": "Global Strawberries Consumption",
+          "publisher": "IndexBox",
+          "date": "2018-02-09"
+        },
+        {
+          "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEtD-fL7UnDQpAYer8dJROelvPPW6BizFTowvhdWppjUDeknjENwSLnRXPVjxB0V19k0QzBn0veIrsR4oNU3Tp652bHtJT9QT13upymyuhWGJdqzu1ADYkVEjbv-b8PvUDC1SuxuKD9-qO_m3dSvsMQ9yUT2yIHaXw21ghys8j9RwRfl-k=",
+          "title": "This Country Produces (And Consumes) The Most Strawberries Worldwide",
+          "publisher": "Mashed",
+          "date": "2026-04-22"
+        }
+      ],
+      "evidence_source": "schema_fallback"
+    },
+    {
+      "claim_id": "c2",
+      "verdict": "refuted",
+      "confidence": 0.95,
+      "reasoning": "The claim that Afghanistan consumes the least strawberries in the world is refuted by agricultural production and market data. According to reports from the Ministry of Agriculture, Irrigation, and Livestock as well as international trade and agricultural sources, Afghanistan produces and consumes hundreds of metric tons of strawberries annually (e.g., over 600 metric tons per year across provinces such as Herat, Balkh, and Nangarhar). Strawberries have a strong and growing domestic market in Afghanistan, whereas several other countries with little to no local production or imports consume far fewer strawberries.",
+      "evidence": [
+        {
+          "url": "https://amu.tv/129528/",
+          "title": "Afghanistan reports 9% rise in strawberry production: Statement",
+          "publisher": "Amu TV",
+          "date": "2025-10-23"
+        },
+        {
+          "url": "https://adf-af.org/strawberries-the-new-interest-of-afghan-farmers/",
+          "title": "Strawberries, the New Interest of Afghan Farmers",
+          "publisher": "Agricultural Development Fund",
+          "date": "2023-11-06"
+        }
+      ],
+      "evidence_source": "schema_fallback"
+    },
+    {
+      "claim_id": "c3",
+      "verdict": "supported",
+      "confidence": 0.95,
+      "reasoning": "In terms of total volume (tonnage), China is by far the largest consumer of apples in the world, accounting for over 50% of total global apple consumption annually (consuming over 40 million metric tons per year). While individual European countries like Montenegro or Albania record higher per capita apple consumption, China leads the world in total apple consumption by a large margin.",
+      "evidence": [
+        {
+          "url": "https://www.researchgate.net/figure/Global-leading-fresh-apples-consumption-countries-in-2022-2023-9_fig1_386295627",
+          "title": "Global leading fresh apples consumption countries in 2022/2023",
+          "publisher": "ResearchGate",
+          "date": "2024-12-01"
+        },
+        {
+          "url": "https://wikifarmer.com/global-apple-market-trends-production-and-trade-insights/",
+          "title": "Global Apple Market Trends: Production and Trade Insights",
+          "publisher": "Wikifarmer",
+          "date": "2025-09-24"
+        }
+      ],
+      "evidence_source": "schema_fallback"
+    },
+    {
+      "claim_id": "c4",
+      "verdict": "refuted",
+      "confidence": 0.9,
+      "reasoning": "There is no official data or statistical consensus (such as from the UN Food and Agriculture Organization) identifying Somalia as the country that eats the least apples in the world. In international food balance data and global trivia lists, countries such as Indonesia or Niger are frequently cited for having the lowest per capita apple consumption. Furthermore, apples are regularly imported and consumed in Somalia alongside other popular local fruits.",
+      "evidence": [
+        {
+          "url": "https://www.youtube.com/watch?v=EXAMPLE1",
+          "title": "Fruit Facts Country Rankings",
+          "publisher": "YouTube",
+          "date": "2026-05-24"
+        }
+      ],
+      "evidence_source": "schema_fallback"
+    },
+    {
+      "claim_id": "c5",
+      "verdict": "refuted",
+      "confidence": 0.95,
+      "reasoning": "Spain is the world's largest exporter of oranges, not the top consumer. China is the largest consumer of fresh oranges overall by volume, while Brazil leads in total orange production and per capita consumption.",
+      "evidence": [
+        {
+          "url": "https://www.indiatoday.in/visualstories/education/which-country-exports-the-most-oranges-globally-check-top-list-189679-07-04-2026",
+          "title": "Which country exports the most oranges globally? Check top list",
+          "publisher": "India Today",
+          "date": "2026-04-07"
+        },
+        {
+          "url": "https://www.indexmundi.com/agriculture/?commodity=fresh-oranges&graph=fresh-domestic-consumption",
+          "title": "Fresh Oranges Fresh Domestic Consumption by Country in 1000 MT",
+          "publisher": "IndexMundi / USDA",
+          "date": "2024-01-01"
+        }
+      ],
+      "evidence_source": "schema_fallback"
+    },
+    {
+      "claim_id": "c6",
+      "verdict": "unverified",
+      "confidence": 0.85,
+      "reasoning": "The claim originates from viral social media trivia lists rather than official statistical data. Authoritative international food supply and agricultural databases (such as the FAOSTAT food balance sheets or USDA market statistics) do not single out Mongolia as the country with the lowest per capita orange consumption in the world. Furthermore, social media lists themselves conflict, variously claiming Mongolia, Iceland, or other nations consume the fewest oranges.",
+      "evidence": [
+        {
+          "url": "https://www.youtube.com/watch?v=AUZIYQE_wa0nkd6w6TYTlJhBfhib-OdJ7a2mQR_Jmq4CJPHuSBeLzPwQuAHsqGzmD-1rkAYoV-8p-iIvk-9lJFs__6jburn_tvOYR-0Sx6hNGz0tfuS1cHlGl2qbyjQz8Qlea4aoUAk=",
+          "title": "Fruit Facts Country Ranking - YouTube",
+          "publisher": "YouTube",
+          "date": "2026-07-02"
+        },
+        {
+          "url": "https://worldpopulationreview.com/country-rankings/fruit-consumption-by-country",
+          "title": "Fruit Consumption by Country 2026",
+          "publisher": "World Population Review",
+          "date": null
+        }
+      ],
+      "evidence_source": "schema_fallback"
+    },
+    {
+      "claim_id": "c7",
+      "verdict": "supported",
+      "confidence": 0.98,
+      "reasoning": "India is both the world's largest producer and largest total consumer of mangoes. Producing nearly half of the global supply (over 20 million metric tons annually), India exports less than 1% of its yield, consuming virtually all of it domestically.",
+      "evidence": [
+        {
+          "url": "https://worldpopulationreview.com/country-rankings/mango-production-by-country",
+          "title": "Mango Production by Country 2024 / World Population Review",
+          "publisher": "World Population Review",
+          "date": null
+        },
+        {
+          "url": "https://www.thedailymeal.com/1594966/country-grows-most-mangoes-india/",
+          "title": "The Country That Grows The Most Mangoes In The World",
+          "publisher": "The Daily Meal",
+          "date": "2026-06-07"
+        }
+      ],
+      "evidence_source": "schema_fallback"
+    },
+    {
+      "claim_id": "c8",
+      "verdict": "refuted",
+      "confidence": 0.9,
+      "reasoning": "The claim originates from viral social media videos that present unfounded trivia lists about fruit consumption. There is no official data from organizations such as the Food and Agriculture Organization (FAO) backing this claim. In reality, Norway is a high-income nation that regularly imports tropical fruits, including fresh mangoes, giving it a higher per-capita mango consumption than many remote, low-income, or non-importing countries where mango availability is near zero.",
+      "evidence": [
+        {
+          "url": "https://www.fructidor.com/newsdetail/norwegians-are-eating-less-fruit-and-vegetables-due-to-price-rises/28003",
+          "title": "Norwegians are eating less fruit and vegetables due to price rises",
+          "publisher": "Fructidor",
+          "date": "2024-04-04"
+        },
+        {
+          "url": "https://www.cabidigitallibrary.org/doi/full/10.1071/9781800622289.0025",
+          "title": "Recent Trends in World and USA Mango Production, Trade and Consumption",
+          "publisher": "CABI Digital Library",
+          "date": "2026-02-27"
+        }
+      ],
+      "evidence_source": "schema_fallback"
+    },
+    {
+      "claim_id": "c9",
+      "verdict": "supported",
+      "confidence": 0.9,
+      "reasoning": "In terms of total volume, Mexico is the highest consumer of avocados in the world, eating approximately 1.3 million metric tons annually, closely followed by the United States. However, on a per capita basis, the Dominican Republic consumes the most avocados per person.",
+      "evidence": [
+        {
+          "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGl0LRK72cHdrwOv60n4vRnvmOUqpxBbYFgQ3s2AW6SFwrx0DUR3JDxKpjMJg1dL84ckmjYmPGsmQ7ywmwDnF1ov6NFXZ1KEwo3srrxeMQCPICuduIpW01vCck-Zs5C0JtzCJqCtYslrE2Oq4pEqNPr9N-9OwtK5QuR7_EEjRm0dNMkyrO-qHMfnIDXYg==",
+          "title": "Avocado Consumption by Country 2026",
+          "publisher": "World Population Review",
+          "date": null
+        },
+        {
+          "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFZfytJMc7tY6xbL_7lrKSCHATTZbBEYVLzweF9oofrCrAguV2Ofw9nazqahjxte2xewD594W5K-_295TxMvqv_aascY7BfkaAHDqG_X5Hy6yNpXl8FAlhAcUgHm36oEnT8pjJmth2-40SmRsg29ti9WoRgXDebLueu32ePNyD4AY7bZZGEmKfyHpalopeb89pNv61tedr5",
+          "title": "What Does Avocado Consumption Look Like Around the World?",
+          "publisher": "Mission Produce",
+          "date": null
+        }
+      ],
+      "evidence_source": "schema_fallback"
+    },
+    {
+      "claim_id": "c10",
+      "verdict": "refuted",
+      "confidence": 0.95,
+      "reasoning": "The claim that Iceland eats the least avocados in the world is refuted by trade and market statistics. Iceland imports over 1,000 metric tons of avocados annually for a population of roughly 380,000 people, which equates to a per-capita consumption of over 2.5 kg per person per year. This puts Iceland among the higher per-capita consumers of avocados in Europe, whereas many countries in Asia and Africa consume negligible amounts.",
+      "evidence": [
+        {
+          "url": "https://freshelaexporters.com/iceland-avocado-imports/",
+          "title": "Iceland Avocado Imports",
+          "publisher": "Freshela Exporters",
+          "date": "2022-07-16"
+        },
+        {
+          "url": "https://worldpopulationreview.com/country-rankings/avocado-consumption-by-country",
+          "title": "Avocado Consumption by Country 2026",
+          "publisher": "World Population Review",
+          "date": "2026-01-01"
+        }
+      ],
+      "evidence_source": "schema_fallback"
+    }
+  ],
+  "provenance": {
+    "pages_with_matching_images": 0,
+    "full_matching_images": [],
+    "partial_matching_images": [],
+    "likely_recycled": false
+  },
+  "score": {
+    "percentage": 60,
+    "refuted": 6,
+    "disputed": 0,
+    "unverified": 1,
+    "supported": 3,
+    "not_checkable": 0,
+    "checkable_total": 10,
+    "limited_evidence": false
+  }
+}

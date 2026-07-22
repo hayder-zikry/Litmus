@@ -1,11 +1,21 @@
+import asyncio
+import logging
 import random
 import string
-import json
-from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+
+import cache
+import jobs
+import models
+import provenance as provenance_module
+import score as score_module
+import verify
+from extract import canonical_watch_url, extract, parse_video_id
+
+log = logging.getLogger("main")
 
 app = FastAPI()
 
@@ -17,11 +27,38 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-EXAMPLE_RESPONSE = json.loads(Path("example_response.json").read_text())
+
+class AnalyzeRequest(BaseModel):
+    url: str
+    start_s: float | None = None
+    end_s: float | None = None
 
 
 def make_job_id() -> str:
     return "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
+
+
+def run_pipeline(job_id: str, video_id: str, canonical_url: str,
+                  start_s: float | None, end_s: float | None) -> None:
+    """The real pipeline: extract -> verify -> provenance -> score, updating status between
+    stages. Runs in a background thread (FastAPI/Starlette does this automatically for a sync
+    BackgroundTasks target), so a blocking call here does not block the event loop."""
+    try:
+        jobs.update_status(job_id, "extracting")
+        extraction = extract(canonical_url, start_s, end_s)
+        jobs.update_status(job_id, "verifying", extraction=extraction)
+
+        verdicts = asyncio.run(verify.verify_claims(extraction.claims))
+        jobs.update_status(job_id, "tracing", verdicts=verdicts)
+
+        provenance = provenance_module.provenance(video_id)
+        score = score_module.compute_score(extraction.claims, verdicts)
+
+        finished = jobs.update_status(job_id, "done", provenance=provenance, score=score)
+        cache.set(finished)
+    except Exception:
+        log.exception("pipeline failed for job_id=%s", job_id)
+        jobs.update_status(job_id, "failed")
 
 
 @app.get("/health")
@@ -30,16 +67,30 @@ def health():
     # reaches the app, so we serve the health check at /health instead.
     return {"ok": True}
 
+
 @app.post("/analyze")
-def analyze(payload: dict):
+def analyze(payload: AnalyzeRequest, background_tasks: BackgroundTasks):
+    try:
+        video_id = parse_video_id(payload.url)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="could not parse a YouTube video id from that url")
+
+    canonical_url = canonical_watch_url(video_id)
     job_id = make_job_id()
-    return JSONResponse(content={"job_id": job_id, "status": "queued"}, status_code=202)
+
+    cached = cache.get(video_id, payload.start_s, payload.end_s)
+    if cached is not None:
+        jobs.store(job_id, cached)
+        return {"job_id": job_id, "status": cached.status}
+
+    jobs.create_job(job_id, video_id, canonical_url, payload.start_s, payload.end_s)
+    background_tasks.add_task(run_pipeline, job_id, video_id, canonical_url, payload.start_s, payload.end_s)
+    return {"job_id": job_id, "status": "queued"}
 
 
 @app.get("/jobs/{job_id}")
 def get_job(job_id: str):
-    # Stub: always return the example data regardless of job_id, so the
-    # frontend can build its rendering logic before the real pipeline exists.
-    result = dict(EXAMPLE_RESPONSE)
-    result["job_id"] = job_id
-    return result
+    job = jobs.get_job(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="no such job")
+    return job
