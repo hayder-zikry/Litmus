@@ -7,7 +7,8 @@ __pycache__/
 .env
 .env.example
 
-# Frontend / extension are deployed separately, not part of the backend container
+# The website (web/) is now served BY this same Cloud Run service -- see main.py's
+# StaticFiles mount. Only the extension stays separate (installed in-browser, not hosted).
 extension/
 web/node_modules/
 web/dist/

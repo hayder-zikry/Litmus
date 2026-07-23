@@ -9,6 +9,7 @@ from collections import deque
 
 from fastapi import BackgroundTasks, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 import cache
@@ -147,3 +148,9 @@ def get_job(job_id: str):
     if job is None:
         raise HTTPException(status_code=404, detail="no such job")
     return job
+
+
+# Serves the website (web/index.html, style.css, app.js) from this same Cloud Run service.
+# Mounted LAST so it only catches what the routes above didn't -- /health, /analyze, /jobs/{id}
+# still resolve to their own handlers first.
+app.mount("/", StaticFiles(directory="web", html=True), name="static")
