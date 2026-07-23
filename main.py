@@ -68,6 +68,15 @@ def health():
     return {"ok": True}
 
 
+@app.delete("/cache")
+def clear_cache():
+    """Wipe every cached result so the next /analyze for any video re-runs the full
+    pipeline. Useful during dev/demo prep since this instance's disk (and cache/) stays
+    alive across requests -- a local file delete on your machine never reaches it."""
+    removed = cache.clear()
+    return {"cleared": removed}
+
+
 @app.post("/analyze")
 def analyze(payload: AnalyzeRequest, background_tasks: BackgroundTasks):
     try:

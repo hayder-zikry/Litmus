@@ -36,6 +36,20 @@ def set(result: models.AnalysisResult) -> None:
     path.write_text(result.model_dump_json(indent=2), encoding="utf-8")
 
 
+def clear() -> int:
+    """Delete every cached result. Returns the number of files removed.
+
+    Exists so cache can be wiped on demand (e.g. via the /cache endpoint) without a
+    redeploy -- handy since Cloud Run keeps this instance (and its disk) alive across
+    requests, so a local `rm` on a dev machine never touches the deployed cache."""
+    if not CACHE_DIR.exists():
+        return 0
+    files = list(CACHE_DIR.glob("*.json"))
+    for f in files:
+        f.unlink()
+    return len(files)
+
+
 if __name__ == "__main__":
     # Self-test: write a result, then read it back as if in a fresh process (proves it survives
     # a restart -- an in-memory dict could not do this).
