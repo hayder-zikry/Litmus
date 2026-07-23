@@ -1,0 +1,145 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   Litmus design tokens — the shared source of truth for the
+   website AND the extension. Dark-only, litmus pH-strip spectrum.
+   ============================================================ */
+
+:root {
+  /* Surfaces */
+  --bg: #0a0e18;
+  --bg-soft: #0d1424;
+  --card: #101a2e;
+  --card-2: #0e1728;
+  --card-border: rgba(129, 161, 255, 0.14);
+  --track: rgba(255, 255, 255, 0.07);
+
+  /* Ink */
+  --ink: #e8ecf5;
+  --muted: #7e8ba6;
+  --faint: #566079;
+
+  /* Litmus reaction spectrum: acid/false -> mixed -> base/true */
+  --refuted: #ef5875;
+  --disputed: #f2a950;
+  --supported: #4f8ff7;
+  --unverified: #5b6b88;
+
+  /* Brand blue accents */
+  --blue: #4f8ff7;
+  --blue-strong: #3d7af0;
+  --blue-dim: rgba(79, 143, 247, 0.14);
+
+  /* ---- shadcn/Aceternity compatibility layer (mapped to dark) ---- */
+  --radius: 0.75rem;
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --card-foreground: var(--ink);
+  --popover: var(--card);
+  --popover-foreground: var(--ink);
+  --primary: var(--blue);
+  --primary-foreground: #04101f;
+  --secondary: var(--bg-soft);
+  --secondary-foreground: var(--ink);
+  --muted-foreground: var(--muted);
+  --accent: var(--blue-dim);
+  --accent-foreground: var(--ink);
+  --destructive: var(--refuted);
+  --destructive-foreground: #2b0510;
+  --border: var(--card-border);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: var(--blue);
+}
+
+/* Map our CSS vars onto Tailwind's utility color space so
+   bg-background / text-foreground / border-border etc. resolve. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+
+  --color-refuted: var(--refuted);
+  --color-disputed: var(--disputed);
+  --color-supported: var(--supported);
+  --color-unverified: var(--unverified);
+
+  --color-blue: var(--blue);
+  --color-blue-strong: var(--blue-strong);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 500px at 15% -10%, rgba(79, 143, 247, 0.1), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(239, 88, 117, 0.06), transparent 55%),
+    var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Numbers/readouts line up in comparisons */
+.tabnums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus ring baseline (AGENTS.md: visible focus, never bare outline:none).
+   In @layer base so components can opt out with outline-none where they show
+   their own focus affordance (e.g. a ring on a wrapping container). */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

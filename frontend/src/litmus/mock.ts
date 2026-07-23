@@ -1,0 +1,133 @@
+import type { AnalysisResult } from './types'
+
+// A complete, valid AnalysisResult used for offline demoing (?mock=1) and for
+// the MacBook-scroll product shot on the landing page. Mirrors the backend's
+// example_response.json. Uses a real, embeddable video id so the IFrame works.
+export const MOCK_RESULT: AnalysisResult = {
+  job_id: 'demo-001',
+  status: 'done',
+  video_id: 'fsyrnOkVsc0',
+  video_url: 'https://www.youtube.com/shorts/fsyrnOkVsc0',
+  start_s: 0,
+  end_s: 45,
+  extraction: {
+    language: 'en',
+    summary: 'A short discussing a recent health claim, an economic statistic, and a historical event.',
+    segments: [{ start_s: 0, end_s: 5, speech: 'Did you know…', on_screen_text: null }],
+    claims: [
+      {
+        id: 'c1',
+        text: 'Drinking celery juice cures inflammation',
+        verbatim: 'celery juice literally cures inflammation',
+        start_s: 3,
+        end_s: 7,
+        claim_type: 'health',
+        checkable: true,
+        entities: ['celery juice'],
+      },
+      {
+        id: 'c2',
+        text: 'Unemployment hit 15% last month',
+        verbatim: 'unemployment is at fifteen percent right now',
+        start_s: 10,
+        end_s: 14,
+        claim_type: 'statistic',
+        checkable: true,
+        entities: ['unemployment rate'],
+      },
+      {
+        id: 'c3',
+        text: 'The event was the biggest of its kind in history',
+        verbatim: "biggest thing that's ever happened",
+        start_s: 18,
+        end_s: 22,
+        claim_type: 'event',
+        checkable: true,
+        entities: [],
+      },
+      {
+        id: 'c4',
+        text: 'A newly discovered comet will be visible next week',
+        verbatim: "there's a new comet you can see next week",
+        start_s: 25,
+        end_s: 29,
+        claim_type: 'event',
+        checkable: true,
+        entities: ['comet'],
+      },
+    ],
+    context_mismatch: null,
+    manipulation_signals: [],
+    injection_attempt: false,
+  },
+  verdicts: [
+    {
+      claim_id: 'c1',
+      verdict: 'refuted',
+      confidence: 0.9,
+      reasoning: 'Multiple health authorities have found no evidence celery juice reduces inflammation.',
+      evidence: [
+        {
+          url: 'https://www.health.harvard.edu/staying-healthy/the-truth-about-detox-diets',
+          title: 'The truth about detox diets',
+          publisher: 'Harvard Health',
+          date: '2023-01-10',
+        },
+      ],
+      evidence_source: 'factcheck_api',
+    },
+    {
+      claim_id: 'c2',
+      verdict: 'disputed',
+      confidence: 0.6,
+      reasoning: 'Official figures show a lower rate; the claim exaggerates but reflects a real trend.',
+      evidence: [
+        {
+          url: 'https://www.bls.gov/news.release/empsit.nr0.htm',
+          title: 'Employment Situation Summary',
+          publisher: 'U.S. Bureau of Labor Statistics',
+          date: '2026-06-05',
+        },
+      ],
+      evidence_source: 'grounding_metadata',
+    },
+    {
+      claim_id: 'c3',
+      verdict: 'not_checkable',
+      confidence: 0.0,
+      reasoning: 'Subjective superlative, not a verifiable factual claim.',
+      evidence: [],
+      evidence_source: 'none',
+    },
+    {
+      claim_id: 'c4',
+      verdict: 'unverified',
+      confidence: 0.0,
+      reasoning: 'No published source confirms or denies this specific claim.',
+      evidence: [],
+      evidence_source: 'none',
+    },
+  ],
+  provenance: {
+    pages_with_matching_images: 12,
+    full_matching_images: [
+      {
+        url: 'https://i.ytimg.com/vi/fsyrnOkVsc0/hq1.jpg',
+        page_url: 'https://example.com/old-article',
+        date: '2023-04-02',
+      },
+    ],
+    partial_matching_images: [],
+    likely_recycled: true,
+  },
+  score: {
+    percentage: 42,
+    refuted: 1,
+    disputed: 1,
+    unverified: 1,
+    supported: 0,
+    not_checkable: 1,
+    checkable_total: 3,
+    limited_evidence: false,
+  },
+}
