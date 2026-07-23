@@ -10,6 +10,20 @@ const API_BASE = "https://litmus-api-907722055477.asia-southeast1.run.app";
 const DWELL_MS = 7000; // how long you must stay on a Short before we analyze it (~one loop)
 const POLL_MS = 2000;
 
+// Claim text, evidence titles/publishers, and URLs all ultimately trace back to the video's own
+// on-screen content or third-party pages -- untrusted data, per the brief's own security rule.
+// Escape before ever interpolating into an HTML string, and only allow http(s) links. This
+// matters more here than on the website: this panel is injected directly into youtube.com.
+function escapeHtml(str) {
+  return String(str ?? "").replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[c]));
+}
+
+function safeHref(url) {
+  return /^https?:\/\//i.test(url || "") ? escapeHtml(url) : "#";
+}
+
 let currentVideoId = null; // the Short we think is on screen
 let dwellTimer = null; // the "have they stayed long enough?" countdown
 let analyzedIds = new Set(); // don't re-analyze the same Short while it loops
@@ -157,7 +171,8 @@ function resultHtml(result) {
 
   function claimLi(v) {
     const claim = claimsById[v.claim_id];
-    const text = claim ? claim.text : v.claim_id;
+    const text = escapeHtml(claim ? claim.text : v.claim_id);
+    // v.verdict is a closed enum enforced by the backend's Pydantic Literal type -- safe as-is.
     return `<li><span class="litmus-verdict litmus-${v.verdict}">${v.verdict}</span>${text}${footnote(v)}</li>`;
   }
 
@@ -175,7 +190,7 @@ function resultHtml(result) {
   const refsHtml = references.length
     ? `<div class="litmus-section-head">References</div>
        <ol class="litmus-refs">${references.map(e =>
-         `<li><a href="${e.url}" target="_blank" rel="noopener">${e.title || e.url}</a></li>`
+         `<li><a href="${safeHref(e.url)}" target="_blank" rel="noopener">${escapeHtml(e.title || e.url)}</a></li>`
        ).join("")}</ol>`
     : "";
 
