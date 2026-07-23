@@ -116,24 +116,50 @@ function renderScore(score) {
     `${score.refuted} refuted, ${score.disputed} disputed, ${score.unverified} unverified, ` +
     `of ${score.checkable_total} checkable claims`;
 
+  const pct = score.percentage;
+  const rotate = -90 + (pct / 100) * 180;
+
+  const speedo = `
+    <div class="speedo-wrap">
+      <div class="speedo">
+        <div class="speedo-mask"></div>
+        <div class="speedo-needle" style="transform: translateX(-50%) rotate(-90deg);"></div>
+        <div class="speedo-hub"></div>
+      </div>
+      <div class="speedo-scale"><span>Trustworthy</span><span>Mixed</span><span>Concern</span></div>
+    </div>`;
+
   if (score.limited_evidence) {
     el.innerHTML = `
       <div class="limited-evidence">
         <div class="gauge-label">Limited evidence available</div>
-        <div style="font-size:22px;font-weight:700;">${score.percentage}%</div>
+        ${speedo}
+        <div class="speedo-readout"><span class="pct">${pct}%</span></div>
         <div class="gauge-breakdown">${breakdown}</div>
       </div>`;
+    animateNeedle(el, rotate);
     return;
   }
 
-  const pct = score.percentage;
-  const color = pct >= 60 ? "var(--refuted)" : pct >= 30 ? "var(--disputed)" : "var(--supported)";
   el.innerHTML = `
-    <div class="gauge" style="background: conic-gradient(${color} ${pct}%, #e8e8e8 0);">
-      <div class="gauge-inner">${pct}%</div>
-    </div>
     <div class="gauge-label">Concern score</div>
+    ${speedo}
+    <div class="speedo-readout"><span class="pct">${pct}%</span></div>
     <div class="gauge-breakdown">${breakdown}</div>`;
+  animateNeedle(el, rotate);
+}
+
+// Needle starts pinned at 0 (-90deg) so it visibly sweeps to its reading.
+// Two rAFs guarantee the browser has painted the starting position before
+// the transition target is applied, so the CSS transition actually fires.
+function animateNeedle(container, targetDeg) {
+  const needle = container.querySelector(".speedo-needle");
+  if (!needle) return;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      needle.style.transform = `translateX(-50%) rotate(${targetDeg}deg)`;
+    });
+  });
 }
 
 function renderClaims(result) {
