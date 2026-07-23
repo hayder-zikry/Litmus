@@ -26,14 +26,14 @@ def get(video_id: str, start_s: float | None = None, end_s: float | None = None)
     path = _cache_path(video_id, start_s, end_s)
     if not path.exists():
         return None
-    return models.AnalysisResult(**json.loads(path.read_text()))
+    return models.AnalysisResult(**json.loads(path.read_text(encoding="utf-8")))
 
 
 def set(result: models.AnalysisResult) -> None:
     """Write a finished result to disk, keyed on its own video_id/start_s/end_s."""
     CACHE_DIR.mkdir(exist_ok=True)
     path = _cache_path(result.video_id, result.start_s, result.end_s)
-    path.write_text(result.model_dump_json(indent=2))
+    path.write_text(result.model_dump_json(indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,207 @@
+:root {
+  --refuted: #c0392b;
+  --disputed: #e67e22;
+  --supported: #27ae60;
+  --unverified: #7f8c8d;
+  --bg: #f4f4f5;
+  --card: #ffffff;
+  --text: #0f0f0f;
+  --muted: #606060;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  padding: 20px 24px;
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: 0.3px;
+}
+
+.card {
+  max-width: 640px;
+  margin: 0 auto 40px;
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 32px;
+}
+
+.hidden { display: none !important; }
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+
+#url-input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+#submit-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #0f0f0f;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#submit-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.error {
+  color: var(--refuted);
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.status {
+  color: var(--muted);
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.back {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* --- Score gauge --- */
+#score-block {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.gauge {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge-inner {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.gauge-label {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.gauge-breakdown {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.limited-evidence .gauge-label {
+  color: var(--unverified);
+}
+
+.no-claims {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 20px 0;
+}
+
+/* --- Claim lists --- */
+h2 {
+  font-size: 15px;
+  margin: 28px 0 10px;
+}
+
+.claim-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.claim-list li {
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.claim-list:empty::after {
+  content: "None.";
+  color: var(--muted);
+  font-size: 14px;
+  display: block;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+}
+
+.verdict-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 6px;
+  margin-right: 6px;
+  color: #fff;
+  vertical-align: middle;
+}
+
+.verdict-tag.refuted { background: var(--refuted); }
+.verdict-tag.disputed { background: var(--disputed); }
+.verdict-tag.supported { background: var(--supported); }
+.verdict-tag.unverified,
+.verdict-tag.not_checkable { background: var(--unverified); }
+
+.footnote {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#references {
+  font-size: 13px;
+  color: var(--muted);
+  padding-left: 20px;
+}
+
+#references a {
+  color: inherit;
+}

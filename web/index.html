@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Litmus</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">Litmus</div>
+  </header>
+
+  <main id="input-view" class="card">
+    <label for="url-input">Paste a YouTube Shorts link</label>
+    <div class="input-row">
+      <input id="url-input" type="text" placeholder="https://www.youtube.com/shorts/..." autocomplete="off">
+      <button id="submit-btn">Check</button>
+    </div>
+    <p id="input-error" class="error hidden"></p>
+    <p id="status-line" class="status hidden"></p>
+  </main>
+
+  <main id="results-view" class="card hidden">
+    <button id="back-btn" class="back">&larr; Check another video</button>
+
+    <div id="score-block"></div>
+
+    <section>
+      <h2>What I flagged as misinformation</h2>
+      <ul id="list-misinformation" class="claim-list"></ul>
+    </section>
+
+    <section>
+      <h2>What I flagged that may be true</h2>
+      <ul id="list-may-be-true" class="claim-list"></ul>
+    </section>
+
+    <section>
+      <h2>What I can't check</h2>
+      <ul id="list-cant-check" class="claim-list"></ul>
+    </section>
+
+    <section>
+      <h2>References</h2>
+      <ol id="references"></ol>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

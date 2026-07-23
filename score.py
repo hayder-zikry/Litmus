@@ -41,7 +41,7 @@ def compute_score(claims: list[models.Claim], verdicts: list[models.ClaimVerdict
 if __name__ == "__main__":
     import json
 
-    data = json.load(open("example_response.json"))
+    data = json.load(open("example_response.json", encoding="utf-8"))
     result = models.AnalysisResult(**data)
     score = compute_score(result.extraction.claims, result.verdicts)
 
