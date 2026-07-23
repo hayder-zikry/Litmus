@@ -7,11 +7,20 @@ __pycache__/
 .env
 .env.example
 
-# The website (web/) is now served BY this same Cloud Run service -- see main.py's
-# StaticFiles mount. Only the extension stays separate (installed in-browser, not hosted).
+# The website (frontend/dist/, the built React app) is served BY this same Cloud Run
+# service -- see main.py's StaticFiles mount. Only frontend/dist/ itself is needed; the
+# source, node_modules, and the old plain-JS web/ folder are not shipped. The browser
+# extension stays separate (installed in-browser, not hosted).
 extension/
-web/node_modules/
-web/dist/
+web/
+frontend/node_modules/
+frontend/src/
+frontend/public/
+frontend/extension-dist/
+frontend/*.md
+frontend/*.json
+frontend/*.ts
+frontend/index.html
 
 # Docs aren't needed to run the server
 *.md

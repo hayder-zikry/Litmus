@@ -150,7 +150,7 @@ def get_job(job_id: str):
     return job
 
 
-# Serves the website (web/index.html, style.css, app.js) from this same Cloud Run service.
-# Mounted LAST so it only catches what the routes above didn't -- /health, /analyze, /jobs/{id}
-# still resolve to their own handlers first.
-app.mount("/", StaticFiles(directory="web", html=True), name="static")
+# Serves the built React frontend (frontend/dist/, built via `npm run build`) from this same
+# Cloud Run service. Mounted LAST so it only catches what the routes above didn't -- /health,
+# /analyze, /jobs/{id} still resolve to their own handlers first.
+app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="static")
