@@ -4,6 +4,19 @@
 // Change this if the backend is ever redeployed under a different URL.
 const API_BASE = "https://litmus-api-907722055477.asia-southeast1.run.app";
 
+// Claim text, evidence titles/publishers, and URLs all ultimately trace back to the video's own
+// on-screen content or third-party pages -- untrusted data, per the brief's own security rule.
+// Escape before ever interpolating into an HTML string, and only allow http(s) links.
+function escapeHtml(str) {
+  return String(str ?? "").replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[c]));
+}
+
+function safeHref(url) {
+  return /^https?:\/\//i.test(url || "") ? escapeHtml(url) : "#";
+}
+
 const inputView = document.getElementById("input-view");
 const resultsView = document.getElementById("results-view");
 const urlInput = document.getElementById("url-input");
@@ -187,9 +200,11 @@ function renderClaims(result) {
 
   function renderList(elId, verdicts, withFootnotes) {
     const el = document.getElementById(elId);
+    // v.verdict is a closed enum enforced by the backend's Pydantic Literal type, so it's safe
+    // to interpolate unescaped -- everything else here is untrusted and gets escaped.
     el.innerHTML = verdicts.map(v => {
       const claim = claimsById[v.claim_id];
-      const text = claim ? claim.text : v.claim_id;
+      const text = escapeHtml(claim ? claim.text : v.claim_id);
       const tag = `<span class="verdict-tag ${v.verdict}">${v.verdict}</span>`;
       const note = withFootnotes ? footnote(v) : "";
       return `<li>${tag}${text}${note}</li>`;
@@ -202,9 +217,11 @@ function renderClaims(result) {
   renderList("list-cant-check", cantCheck, false);
 
   const refsEl = document.getElementById("references");
-  refsEl.innerHTML = references.map(e =>
-    `<li><a href="${e.url}" target="_blank" rel="noopener">${e.title || e.url}</a>${e.publisher ? ` -- ${e.publisher}` : ""}</li>`
-  ).join("");
+  refsEl.innerHTML = references.map(e => {
+    const label = escapeHtml(e.title || e.url);
+    const publisher = e.publisher ? ` -- ${escapeHtml(e.publisher)}` : "";
+    return `<li><a href="${safeHref(e.url)}" target="_blank" rel="noopener">${label}</a>${publisher}</li>`;
+  }).join("");
 }
 
 // --- Wiring ---
