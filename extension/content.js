@@ -1,15 +1,14 @@
 // Litmus content script.
-// Runs on every YouTube page. Its whole job right now:
+// Runs on every YouTube page. Its whole job:
 //   1. Notice which Short you're watching (read the id out of the URL).
 //   2. Notice when you scroll to a different Short (the URL changes).
-//   3. If you stay on one Short past a threshold, treat that as "interested" and analyze it.
+//   3. If you stay on one Short past a threshold, treat that as "interested" and analyze it
+//      for real against the live backend.
 //   4. Show the result in a panel drawn on top of the page.
-//
-// There is NO real backend yet. Step 3 currently shows fake results after a short delay,
-// so we can prove the detect -> wait -> show flow works. Swapping in the real backend later
-// is a one-function change (see analyzeShort).
 
+const API_BASE = "https://litmus-api-907722055477.asia-southeast1.run.app";
 const DWELL_MS = 7000; // how long you must stay on a Short before we analyze it (~one loop)
+const POLL_MS = 2000;
 
 let currentVideoId = null; // the Short we think is on screen
 let dwellTimer = null; // the "have they stayed long enough?" countdown
@@ -53,45 +52,139 @@ function onLocationMaybeChanged() {
 setInterval(onLocationMaybeChanged, 500);
 onLocationMaybeChanged(); // also check right away on first load
 
-// ---- The part that will eventually call the real backend ----
-// For now it just shows a "checking" panel, waits, then fills in fake results.
-function analyzeShort(id) {
-  showPanel(loadingHtml());
+// ---- Real backend calls ----
 
-  // FAKE: pretend the backend took 1.5s and returned this. Replace this whole block later with a
-  // real request to the Litmus API and render its response instead.
-  setTimeout(() => {
-    // If they've already scrolled away, don't bother drawing over the new video.
-    if (id !== currentVideoId) return;
-    showPanel(resultHtml(FAKE_RESULT));
-  }, 1500);
+async function analyzeShort(id) {
+  showPanel(loadingHtml("Checking this Short..."));
+
+  let job;
+  try {
+    const resp = await fetch(`${API_BASE}/analyze`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: `https://www.youtube.com/shorts/${id}` }),
+    });
+    if (!resp.ok) throw new Error(`server returned ${resp.status}`);
+    job = await resp.json();
+  } catch (e) {
+    if (id === currentVideoId) showPanel(errorHtml());
+    return;
+  }
+
+  poll(id, job.job_id);
 }
 
-const FAKE_RESULT = {
-  score: 58,
-  breakdown: "2 refuted · 1 disputed · 1 unverified · of 4 checkable claims",
-  claims: [
-    { text: "Vaccines cause autism.", verdict: "refuted" },
-    { text: "This footage is from last week.", verdict: "disputed" },
-    { text: "The event happened in Paris.", verdict: "supported" },
-    { text: "Officials confirmed the numbers privately.", verdict: "unverified" }
-  ]
+async function poll(id, jobId) {
+  // Stop updating the panel if the user has scrolled away from this Short.
+  if (id !== currentVideoId) return;
+
+  let data;
+  try {
+    const resp = await fetch(`${API_BASE}/jobs/${jobId}`);
+    data = await resp.json();
+  } catch (e) {
+    if (id === currentVideoId) showPanel(errorHtml());
+    return;
+  }
+
+  if (id !== currentVideoId) return; // scrolled away while waiting
+
+  if (data.status === "failed") {
+    showPanel(errorHtml());
+    return;
+  }
+
+  if (data.status === "done") {
+    showPanel(resultHtml(data));
+    return;
+  }
+
+  showPanel(loadingHtml(STATUS_LABELS[data.status] || "Checking this Short..."));
+  setTimeout(() => poll(id, jobId), POLL_MS);
+}
+
+const STATUS_LABELS = {
+  queued: "Queued...",
+  extracting: "Watching the video...",
+  verifying: "Checking claims against evidence...",
+  tracing: "Tracing the footage...",
 };
 
-// ---- Drawing the panel ----
-function loadingHtml() {
+// ---- Rendering ----
+
+function loadingHtml(label) {
   return `<div class="litmus-head">Litmus</div>
-          <div class="litmus-loading">Checking this Short…</div>`;
+          <div class="litmus-loading">${label}</div>`;
 }
 
-function resultHtml(r) {
-  const claims = r.claims.map(c =>
-    `<li><span class="litmus-verdict litmus-${c.verdict}">${c.verdict}</span> ${c.text}</li>`
-  ).join("");
+function errorHtml() {
   return `<div class="litmus-head">Litmus</div>
-          <div class="litmus-score">${r.score}% concern</div>
-          <div class="litmus-breakdown">${r.breakdown}</div>
-          <ul class="litmus-claims">${claims}</ul>`;
+          <div class="litmus-loading">Couldn't check this one. Try again later.</div>`;
+}
+
+function resultHtml(result) {
+  const score = result.score || {};
+  const claimsById = {};
+  for (const c of (result.extraction && result.extraction.claims) || []) claimsById[c.id] = c;
+
+  let scoreHtml;
+  if (score.percentage === null || score.percentage === undefined) {
+    scoreHtml = `<div class="litmus-score">No checkable claims found.</div>`;
+  } else {
+    const breakdown =
+      `${score.refuted} refuted, ${score.disputed} disputed, ${score.unverified} unverified, ` +
+      `of ${score.checkable_total} checkable`;
+    const label = score.limited_evidence ? "Limited evidence available" : "Concern score";
+    scoreHtml = `<div class="litmus-score">${label}: ${score.percentage}%</div>
+                 <div class="litmus-breakdown">${breakdown}</div>`;
+  }
+
+  // Same three-bucket grouping as the website, for a consistent story.
+  const misinformation = [];
+  const mayBeTrue = [];
+  let references = [];
+
+  function footnote(v) {
+    if (!v.evidence || v.evidence.length === 0) return "";
+    references.push(v.evidence[0]);
+    return ` <span class="litmus-footnote">[${references.length}]</span>`;
+  }
+
+  for (const v of result.verdicts || []) {
+    if (v.verdict === "refuted" || v.verdict === "disputed") misinformation.push(v);
+    else if (v.verdict === "supported") mayBeTrue.push(v);
+  }
+
+  function claimLi(v) {
+    const claim = claimsById[v.claim_id];
+    const text = claim ? claim.text : v.claim_id;
+    return `<li><span class="litmus-verdict litmus-${v.verdict}">${v.verdict}</span>${text}${footnote(v)}</li>`;
+  }
+
+  const misinfoHtml = misinformation.length
+    ? `<div class="litmus-section-head">Flagged as misinformation</div><ul class="litmus-claims">${misinformation.map(claimLi).join("")}</ul>`
+    : "";
+  const trueHtml = mayBeTrue.length
+    ? `<div class="litmus-section-head">Flagged that may be true</div><ul class="litmus-claims">${mayBeTrue.map(claimLi).join("")}</ul>`
+    : "";
+
+  const recycled = result.provenance && result.provenance.likely_recycled
+    ? `<div class="litmus-recycled">⚠ This footage appears to predate the video's upload.</div>`
+    : "";
+
+  const refsHtml = references.length
+    ? `<div class="litmus-section-head">References</div>
+       <ol class="litmus-refs">${references.map(e =>
+         `<li><a href="${e.url}" target="_blank" rel="noopener">${e.title || e.url}</a></li>`
+       ).join("")}</ol>`
+    : "";
+
+  return `<div class="litmus-head">Litmus</div>
+          ${scoreHtml}
+          ${recycled}
+          ${misinfoHtml}
+          ${trueHtml}
+          ${refsHtml}`;
 }
 
 function showPanel(html) {

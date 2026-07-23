@@ -10,5 +10,8 @@
       "css": ["panel.css"],
       "run_at": "document_idle"
     }
+  ],
+  "host_permissions": [
+    "https://litmus-api-907722055477.asia-southeast1.run.app/*"
   ]
 }

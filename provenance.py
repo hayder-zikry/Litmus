@@ -9,6 +9,8 @@ Public surface:
 
 Smoke test:  python provenance.py <video_id_or_url>
 """
+import logging
+import os
 import re
 from datetime import datetime, date
 
@@ -17,8 +19,20 @@ import httpx
 import models
 from extract import parse_video_id, canonical_watch_url, thumbnail_urls
 
+log = logging.getLogger("provenance")
+
+_YOUTUBE_URL_RE = re.compile(r"(?:youtube\.com|youtu\.be)")
+
 _client = None
-_HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) LitmusBot/0.1"}
+_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9",
+    # YouTube shows a cookie-consent interstitial (no uploadDate in the HTML) to traffic it
+    # doesn't recognize -- notably requests from cloud/datacenter IPs like Cloud Run's. This
+    # cookie tells YouTube consent was already given, so it serves the real watch page instead.
+    "Cookie": "CONSENT=YES+cb.20210328-17-p0.en+FX+888",
+}
 
 # Matches schema.org-style dates embedded in a page: "uploadDate":"2019-05-01T12:00:00Z" etc.
 # Covers YouTube's own watch pages (ld+json VideoObject) and many other sites that use the
@@ -41,21 +55,58 @@ def _get_client():
     return _client
 
 
+def _youtube_publish_date(video_id: str) -> str | None:
+    """Publish date for a YouTube video via the Data API. Reliable and fast -- avoids scraping
+    watch pages, which Google serves a stripped-down bot-safe variant of (no date metadata) to
+    traffic from datacenter IPs like Cloud Run's."""
+    key = os.environ.get("YOUTUBE_API_KEY")
+    if not key:
+        return None
+    try:
+        resp = httpx.get(
+            "https://www.googleapis.com/youtube/v3/videos",
+            params={"part": "snippet", "id": video_id, "key": key},
+            timeout=6,
+        )
+        if resp.status_code != 200:
+            log.warning("YouTube Data API -> HTTP %s for %s", resp.status_code, video_id)
+            return None
+        items = resp.json().get("items", [])
+        if not items:
+            return None
+        return items[0]["snippet"]["publishedAt"]
+    except Exception as e:
+        log.warning("YouTube Data API lookup failed for %s: %s", video_id, e)
+        return None
+
+
 def _scrape_date(page_url: str) -> str | None:
     """Best-effort: fetch a page and pull a publish/upload date out of its HTML.
-    Returns an ISO date string, or None if we can't find one (a normal, valid outcome)."""
+    Returns an ISO date string, or None if we can't find one (a normal, valid outcome).
+    YouTube URLs are routed to the Data API instead (see _youtube_publish_date)."""
+    if _YOUTUBE_URL_RE.search(page_url):
+        try:
+            video_id = parse_video_id(page_url)
+        except ValueError:
+            return None
+        return _youtube_publish_date(video_id)
+
     try:
         resp = httpx.get(page_url, headers=_HEADERS, timeout=6, follow_redirects=True)
         if resp.status_code != 200:
+            log.warning("scrape %s -> HTTP %s (final url: %s)", page_url, resp.status_code, resp.url)
             return None
         html = resp.text
-    except Exception:
+    except Exception as e:
+        log.warning("scrape %s -> exception: %s", page_url, e)
         return None
 
     for pattern in _DATE_PATTERNS:
         m = pattern.search(html)
         if m:
             return m.group(1)
+    log.warning("scrape %s -> 200 OK, %d bytes, no date pattern matched. snippet: %r",
+                page_url, len(html), html[:300])
     return None
 
 
@@ -140,6 +191,8 @@ def provenance(url_or_id: str) -> models.Provenance:
 
 if __name__ == "__main__":
     import sys
+    from dotenv import load_dotenv
+    load_dotenv()
 
     vid = sys.argv[1] if len(sys.argv) > 1 else "klhX42PAzsk"
     result = provenance(vid)

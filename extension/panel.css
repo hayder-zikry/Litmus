@@ -4,6 +4,8 @@
   top: 72px;
   right: 16px;
   width: 300px;
+  max-height: 80vh;
+  overflow-y: auto;
   z-index: 99999;
   background: #ffffff;
   color: #0f0f0f;
@@ -60,4 +62,39 @@
 .litmus-refuted { background: #c0392b; }
 .litmus-disputed { background: #e67e22; }
 .litmus-supported { background: #27ae60; }
-.litmus-unverified { background: #7f8c8d; }
+.litmus-unverified,
+.litmus-not_checkable { background: #7f8c8d; }
+
+.litmus-recycled {
+  background: #fff4e5;
+  color: #8a5a00;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+.litmus-section-head {
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #606060;
+  margin: 14px 0 4px;
+}
+
+.litmus-footnote {
+  color: #909090;
+  font-size: 11px;
+}
+
+.litmus-refs {
+  font-size: 11px;
+  color: #606060;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.litmus-refs a {
+  color: inherit;
+}
